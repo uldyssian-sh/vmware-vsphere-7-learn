@@ -3,7 +3,7 @@
 **Author:** LT  
 **License:** MIT  
 **Duration:** 5 days  
-**Audience:** System administrators and system engineers  
+**Audience:** System Administrators and System Engineers  
 
 ---
 
