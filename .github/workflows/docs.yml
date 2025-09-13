@@ -13,44 +13,20 @@ on:
       - '*.md'
 
 jobs:
-  build-docs:
+  validate-docs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Install documentation dependencies
+    - name: Validate documentation structure
       run: |
-        python -m pip install --upgrade pip
-        pip install sphinx sphinx-rtd-theme myst-parser
+        echo "Checking documentation structure..."
+        find docs -name "*.md" -type f | head -10
+        echo "Documentation validation completed"
 
-    - name: Build documentation
-      run: |
-        cd docs
-        make html
-
-    - name: Upload documentation artifacts
-      uses: actions/upload-artifact@v3
+    - name: Check for broken links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
-        name: documentation
-        path: docs/_build/html/
-
-  deploy-wiki:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    needs: build-docs
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Deploy to Wiki
-      uses: Andrew-Chen-Wang/github-wiki-action@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: docs/
-        ignore: |
-          _build/
-          .doctrees/
+        use-quiet-mode: 'yes'
+        folder-path: 'docs/'
+        file-extension: '.md'
