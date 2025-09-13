@@ -1,0 +1,105 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10', '3.11']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install flake8 black isort pytest
+
+    - name: Lint with flake8
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 scripts/python --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 scripts/python --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+
+    - name: Check code formatting with black
+      run: |
+        black --check scripts/python
+
+    - name: Check import sorting with isort
+      run: |
+        isort --check-only scripts/python
+
+    - name: Run Python tests
+      run: |
+        pytest tests/ -v --cov=scripts/python --cov-report=xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+
+  powershell-lint:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install PSScriptAnalyzer
+      shell: powershell
+      run: |
+        Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+
+    - name: Lint PowerShell scripts
+      shell: powershell
+      run: |
+        $results = Invoke-ScriptAnalyzer -Path "scripts/powercli" -Recurse -Severity Warning,Error
+        if ($results) {
+          $results | Format-Table -AutoSize
+          exit 1
+        }
+
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Lint Markdown files
+      uses: articulate/actions-markdownlint@v1
+      with:
+        config: .markdownlint.json
+        files: '**/*.md'
+        ignore: 'node_modules'
+
+  link-checker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check links in documentation
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        use-verbose-mode: 'yes'
+        config-file: '.markdown-link-check.json'
