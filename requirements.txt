@@ -1,6 +1,5 @@
 # VMware vSphere Python SDK
 pyvmomi>=7.0.3
-pyVim>=7.0.3
 
 # HTTP and SSL libraries
 requests>=2.28.0
