@@ -21,15 +21,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install flake8 black isort
 
-    - name: Lint with flake8
+    - name: Check Python syntax
       run: |
-        flake8 scripts/python --count --select=E9,F63,F7,F82 --show-source --statistics --exit-zero
-
-    - name: Check code formatting with black
-      run: |
-        black --diff --check scripts/python || echo "Black formatting issues found but not failing build"
+        python -m py_compile scripts/python/*.py
+        echo "Python syntax check completed"
 
   powershell-lint:
     runs-on: windows-latest
