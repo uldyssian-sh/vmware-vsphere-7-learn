@@ -7,6 +7,8 @@
 
 A comprehensive learning resource for VMware vSphere 7 with hands-on labs, automation scripts, and real-world examples.
 
+**Author**: LT - [GitHub Profile](https://github.com/uldyssian-sh)
+
 ## 🎯 Overview
 
 This repository provides a complete learning path for VMware vSphere 7, from basic concepts to advanced automation and management techniques. Whether you're preparing for VCP certification or looking to enhance your virtualization skills, this hub has everything you need.
