@@ -11,7 +11,8 @@ A comprehensive learning resource for VMware vSphere 7 with hands-on labs, autom
 
 ## 🎯 Overview
 
-This repository provides a complete learning path for VMware vSphere 7, from basic concepts to advanced automation and management techniques. Whether you're preparing for VCP certification or looking to enhance your virtualization skills, this hub has everything you need.
+This repository provides a complete learning path for VMware vSphere 7, from basic concepts to advanced automation and management techniques.
+Whether you're preparing for VCP certification or looking to enhance your virtualization skills, this hub has everything you need.
 
 ## 📚 What You'll Learn
 
