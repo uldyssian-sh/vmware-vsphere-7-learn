@@ -247,7 +247,7 @@ sync
 2. Click **Edit settings**
 3. Configure NTP:
    ```
-   NTP Servers: 
+   NTP Servers:
    - pool.ntp.org
    - time.google.com
    ```
