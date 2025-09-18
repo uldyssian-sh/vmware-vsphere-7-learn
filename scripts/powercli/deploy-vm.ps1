@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Automated VM deployment script for vSphere environments
+Automated VM deployment script for vSphere environments
 
 .DESCRIPTION
     This script automates the deployment of virtual machines in a vSphere environment.

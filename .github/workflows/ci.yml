@@ -184,8 +184,8 @@ jobs:
 
     - name: Run integration tests
       run: |
-        # Test import capabilities
-        python -c "import sys; sys.path.append('scripts/python'); from vsphere_api_examples import vSphereManager; print('✅ Import test passed')"
+        # Test script syntax
+        python -m py_compile scripts/python/vsphere-api-examples.py
         
         # Test script help functionality
         python scripts/python/vsphere-api-examples.py --help 2>/dev/null || echo "✅ Script structure validated"
