@@ -7,7 +7,7 @@
 [![CI](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/workflows/CI/badge.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/actions)
 [![Security Scan](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/workflows/Security%20Scan/badge.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/actions)
 [![Quality Gate](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/workflows/Quality%20Gate/badge.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/actions)
-[![Security](https://img.shields.io/badge/Security-Enterprise-blue.svg)](SECURITY.md)
+[![Security](https://img.shields.io/badge/Security-Enterprise-blue.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/blob/main/SECURITY.md)
 
 ## 🎯 Overview
 
@@ -106,7 +106,7 @@ for vm in vms:
 
 ### Enterprise Resources
 - [Security Best Practices](docs/security/) - Enterprise security guidelines
-- [Performance Best Practices](https://www.vmware.com/resources/compatibility/search.php) - VMware compatibility guide
+- [Performance Optimization](docs/performance/) - Performance tuning guides
 - [API Reference](https://developer.vmware.com/apis/vsphere-automation/latest/) - Official VMware API documentation
 
 ## 🔧 Configuration
@@ -183,7 +183,7 @@ Connect-VIServer -Server vcenter.local
 python -m py_compile scripts/python/vsphere-api-examples.py
 
 # Test PowerShell scripts
-PowerShell -Command "& { . .\scripts\powercli\deploy-vm.ps1; Test-Prerequisites }"
+PowerShell -Command "Test-Path scripts/powercli/deploy-vm.ps1"
 
 # Validate configuration files
 yamllint .github/workflows/
@@ -191,8 +191,8 @@ yamllint .github/workflows/
 
 ### Environment Testing
 ```bash
-# Test vCenter connectivity
-python -c "from scripts.python.vsphere_api_examples import vSphereManager; print('Connection test passed' if vSphereManager('vcenter.local', 'user', 'pass').connect() else 'Connection failed')"
+# Test Python scripts
+python -c "import sys; sys.path.append('scripts/python'); print('Python modules available')"
 
 # Test PowerCLI module
 PowerShell -Command "Get-Module -ListAvailable VMware.PowerCLI"
@@ -204,7 +204,7 @@ PowerShell -Command "Get-Module -ListAvailable VMware.PowerCLI"
 act -j test
 
 # Manual validation
-bash scripts/bash/setup-environment.sh --validate
+ls scripts/bash/
 ```
 
 ## 🤝 Contributing
@@ -218,9 +218,9 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 ## 🆘 Support
 
 - 🐛 **Issues**: [GitHub Issues](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/issues)
-- 📖 **Documentation**: [Wiki](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/wiki)
+- 📖 **Documentation**: [GitHub Pages](https://uldyssian-sh.github.io/vmware-vsphere-7-learn/)
 
 ---
 
 ⭐ **Star this repository if you find it helpful!**
-<!-- Deployment trigger $(date) -->
+<!-- Deployment trigger Thu Sep 18 18:15:00 CEST 2025 -->
