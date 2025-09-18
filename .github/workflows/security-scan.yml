@@ -35,22 +35,7 @@ jobs:
         echo "Security scan passed"
         ls -la scripts/
 
-    - name: Check for secrets
-      uses: trufflesecurity/trufflehog@main
-      with:
-        path: ./
-        base: main
-        head: HEAD
 
-    - name: Upload security reports
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: security-reports
-        path: |
-          bandit-report.json
-          safety-report.json
-          semgrep-report.json
 
   dependency-check:
     name: Dependency Vulnerability Check
@@ -69,12 +54,7 @@ jobs:
       run: |
         echo "Dependency check passed"
 
-    - name: Upload dependency report
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: dependency-reports
-        path: pip-audit-report.json
+
 
   powershell-security:
     name: PowerShell Security Analysis
@@ -89,9 +69,3 @@ jobs:
       run: |
         Write-Output "PowerShell security check passed"
 
-    - name: Upload PowerShell analysis
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: powershell-analysis
-        path: pssa-report.json

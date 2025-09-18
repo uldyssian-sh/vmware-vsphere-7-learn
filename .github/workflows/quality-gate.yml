@@ -33,12 +33,7 @@ jobs:
         echo "Code quality check passed"
         ls -la
 
-    - name: Upload quality reports
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: quality-reports
-        path: pylint-report.json
+
 
   markdown-lint:
     name: Markdown Linting
