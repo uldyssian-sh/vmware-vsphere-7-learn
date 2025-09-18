@@ -1,0 +1,342 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  validate-release:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Validate tag format
+      run: |
+        if [[ "${{ github.ref }}" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "✅ Valid semantic version tag"
+        else
+          echo "❌ Invalid tag format. Use semantic versioning (v1.0.0)"
+          exit 1
+        fi
+
+    - name: Check changelog
+      run: |
+        if [ ! -f "CHANGELOG.md" ]; then
+          echo "❌ CHANGELOG.md not found"
+          exit 1
+        fi
+        
+        version=$(echo ${{ github.ref }} | sed 's/refs\/tags\///')
+        if ! grep -q "$version" CHANGELOG.md; then
+          echo "⚠️ Version $version not found in CHANGELOG.md"
+        else
+          echo "✅ Version found in CHANGELOG.md"
+        fi
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: validate-release
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        version=$(echo ${{ github.ref }} | sed 's/refs\/tags\///')
+        
+        # Extract release notes from CHANGELOG.md
+        if [ -f "CHANGELOG.md" ]; then
+          # Get content between current version and previous version
+          awk "/## \[$version\]/,/## \[/{if(/## \[/ && !/## \[$version\]/) exit; if(!/## \[$version\]/) print}" CHANGELOG.md > release_notes.md
+        else
+          echo "## What's Changed" > release_notes.md
+          echo "" >> release_notes.md
+          echo "- Various improvements and bug fixes" >> release_notes.md
+        fi
+        
+        # Add contributors
+        echo "" >> release_notes.md
+        echo "## Contributors" >> release_notes.md
+        git log --pretty=format:"- %an" $(git describe --tags --abbrev=0 HEAD^)..HEAD | sort -u >> release_notes.md || echo "- @uldyssian-sh" >> release_notes.md
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+
+  update-documentation:
+    name: Update Documentation
+    runs-on: ubuntu-latest
+    needs: create-release
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update version in files
+      run: |
+        version=$(echo ${{ github.ref }} | sed 's/refs\/tags\/v//')
+        
+        # Update package.json
+        if [ -f "package.json" ]; then
+          sed -i "s/\"version\": \".*\"/\"version\": \"$version\"/" package.json
+        fi
+        
+        # Update README.md deployment trigger
+        sed -i "s/<!-- Deployment trigger .* -->/<!-- Deployment trigger $(date) -->/" README.md
+
+    - name: Commit version updates
+      run: |
+        git config --local user.email "25517637+uldyssian-sh@users.noreply.github.com"
+        git config --local user.name "uldyssian-sh"
+        
+        if git diff --quiet; then
+          echo "No changes to commit"
+        else
+          git add .
+          git commit -m "chore: update version references for release ${{ github.ref }}"
+          git push origin main
+        fi
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    runs-on: ubuntu-latest
+    needs: create-release
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Build documentation site
+      run: |
+        mkdir -p _site
+        
+        # Create index.html
+        cat > _site/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VMware vSphere 7 Learning Hub</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header { 
+            background: #2c3e50; 
+            color: white; 
+            padding: 40px; 
+            text-align: center; 
+        }
+        .content { 
+            padding: 40px; 
+        }
+        .feature-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+            margin: 30px 0; 
+        }
+        .feature-card { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            border-radius: 8px; 
+            border-left: 4px solid #007bff; 
+        }
+        .btn { 
+            display: inline-block; 
+            padding: 12px 24px; 
+            background: #007bff; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            margin: 10px; 
+            transition: background 0.3s;
+        }
+        .btn:hover { 
+            background: #0056b3; 
+        }
+        .stats { 
+            display: flex; 
+            justify-content: space-around; 
+            margin: 30px 0; 
+            text-align: center; 
+        }
+        .stat { 
+            padding: 20px; 
+        }
+        .stat-number { 
+            font-size: 2em; 
+            font-weight: bold; 
+            color: #007bff; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 VMware vSphere 7 Learning Hub</h1>
+            <p>Comprehensive learning resources and automation tools for VMware vSphere 7.0</p>
+            <div>
+                <a href="https://github.com/uldyssian-sh/vmware-vsphere-7-learn" class="btn">View on GitHub</a>
+                <a href="https://github.com/uldyssian-sh/vmware-vsphere-7-learn/releases/latest" class="btn">Latest Release</a>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">50+</div>
+                    <div>Scripts & Examples</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">10+</div>
+                    <div>Learning Modules</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">100%</div>
+                    <div>Free & Open Source</div>
+                </div>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🎯 Structured Learning</h3>
+                    <p>Progressive tutorials from vSphere basics to advanced automation and enterprise deployment patterns.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤖 Automation Scripts</h3>
+                    <p>PowerCLI and Python scripts for VM deployment, configuration management, and monitoring.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔒 Security Focus</h3>
+                    <p>Enterprise-grade security practices, hardening guides, and compliance automation.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🧪 Hands-on Labs</h3>
+                    <p>Practical exercises with real-world scenarios for skill development and certification prep.</p>
+                </div>
+            </div>
+            
+            <h2>🚀 Quick Start</h2>
+            <pre><code># Clone the repository
+git clone https://github.com/uldyssian-sh/vmware-vsphere-7-learn.git
+cd vmware-vsphere-7-learn
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start learning!
+open docs/tutorials/01-introduction.md</code></pre>
+            
+            <h2>📚 Learning Modules</h2>
+            <ul>
+                <li><strong>Module 1:</strong> vSphere 7 Fundamentals</li>
+                <li><strong>Module 2:</strong> ESXi Installation & Configuration</li>
+                <li><strong>Module 3:</strong> vCenter Server Management</li>
+                <li><strong>Module 4:</strong> Virtual Machine Operations</li>
+                <li><strong>Module 5:</strong> Storage & Networking</li>
+                <li><strong>Module 6:</strong> Automation with PowerCLI</li>
+                <li><strong>Module 7:</strong> vSphere API Programming</li>
+                <li><strong>Module 8:</strong> Security & Compliance</li>
+                <li><strong>Module 9:</strong> Performance Optimization</li>
+                <li><strong>Module 10:</strong> Troubleshooting & Monitoring</li>
+            </ul>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <p><strong>Release:</strong> <span id="version">Loading...</span> | <strong>Updated:</strong> <span id="updated"></span></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('updated').textContent = new Date().toLocaleDateString();
+        
+        // Fetch latest release version
+        fetch('https://api.github.com/repos/uldyssian-sh/vmware-vsphere-7-learn/releases/latest')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('version').textContent = data.tag_name || 'v1.0.0';
+            })
+            .catch(() => {
+                document.getElementById('version').textContent = 'v1.0.0';
+            });
+    </script>
+</body>
+</html>
+EOF
+
+    - name: Upload Pages artifact
+      uses: actions/upload-pages-artifact@v3
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+  notify-success:
+    name: Notify Release Success
+    runs-on: ubuntu-latest
+    needs: [create-release, update-documentation, deploy-pages]
+    if: success()
+    
+    steps:
+    - name: Success notification
+      run: |
+        echo "🎉 Release ${{ github.ref }} completed successfully!"
+        echo "✅ GitHub release created"
+        echo "✅ Documentation updated"
+        echo "✅ GitHub Pages deployed"
+        echo ""
+        echo "🔗 Release URL: https://github.com/uldyssian-sh/vmware-vsphere-7-learn/releases/latest"
+        echo "🔗 Pages URL: https://uldyssian-sh.github.io/vmware-vsphere-7-learn/"

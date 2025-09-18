@@ -1,0 +1,125 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  security-scan:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install security tools
+      run: |
+        pip install bandit safety semgrep
+        npm install -g audit-ci
+
+    - name: Run Bandit security scan
+      run: |
+        bandit -r scripts/python/ -f json -o bandit-report.json || true
+        bandit -r scripts/python/ -f txt
+
+    - name: Run Safety check
+      run: |
+        safety check --json --output safety-report.json || true
+        safety check
+
+    - name: Run Semgrep
+      run: |
+        semgrep --config=auto scripts/ --json --output=semgrep-report.json || true
+        semgrep --config=auto scripts/
+
+    - name: Check for secrets
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: main
+        head: HEAD
+
+    - name: Upload security reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+          semgrep-report.json
+
+  dependency-check:
+    name: Dependency Vulnerability Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pip-audit
+
+    - name: Run pip-audit
+      run: |
+        pip-audit --format=json --output=pip-audit-report.json || true
+        pip-audit
+
+    - name: Upload dependency report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: dependency-reports
+        path: pip-audit-report.json
+
+  powershell-security:
+    name: PowerShell Security Analysis
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install PSScriptAnalyzer
+      shell: powershell
+      run: |
+        Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+
+    - name: Run PSScriptAnalyzer
+      shell: powershell
+      run: |
+        $results = Invoke-ScriptAnalyzer -Path "scripts/powercli/" -Recurse -ReportSummary
+        $results | ConvertTo-Json | Out-File -FilePath "pssa-report.json"
+        Write-Output $results
+
+    - name: Upload PowerShell analysis
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: powershell-analysis
+        path: pssa-report.json
