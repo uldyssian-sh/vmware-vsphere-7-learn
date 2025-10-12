@@ -2,35 +2,12 @@
 
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.x.x   | :white_check_mark: |
+We support security updates for the latest version of this project.
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, please report it by creating a [security advisory](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/security/advisories/new).
+Please report security vulnerabilities by creating an issue or contacting the maintainers directly.
 
-### What to Include
+## Dependency Management
 
-- Description of the vulnerability
-- Steps to reproduce
-- Potential impact
-- Suggested fix (if available)
-
-### Response Timeline
-
-- **Initial Response**: Within 24 hours
-- **Status Update**: Within 7 days
-- **Resolution**: Within 30 days (depending on severity)
-
-## Security Best Practices
-
-- Never commit credentials or sensitive data
-- Use environment variables for configuration
-- Enable two-factor authentication
-- Keep dependencies updated
-- Follow principle of least privilege
-
-## Contact
-
-For security concerns, contact: security@example.com
+This project uses automated dependency scanning with Trivy. Known false positives and low-risk vulnerabilities are documented in `.trivyignore`.
