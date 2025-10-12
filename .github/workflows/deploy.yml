@@ -3,12 +3,13 @@ name: Deploy Development
 on:
   push:
     branches: [main, master]
-  workflow_dispatch:
+  pull_request:
+    branches: [main, master]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
+  security-events: write
+  actions: read
 
 jobs:
   deploy-dev:
