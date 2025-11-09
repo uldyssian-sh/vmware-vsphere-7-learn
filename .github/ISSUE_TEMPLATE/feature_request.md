@@ -34,7 +34,3 @@ Add any other context, screenshots, or examples about the feature request here.
 - [ ] Low - Nice to have
 - [ ] Medium - Would be helpful
 - [ ] High - Important for my workflow
-- [ ] Critical - Blocking my work# Updated Sun Nov  9 12:49:15 CET 2025
-# Updated Sun Nov  9 12:52:45 CET 2025
-# Updated Sun Nov  9 12:55:57 CET 2025
-# File updated 1762692710
