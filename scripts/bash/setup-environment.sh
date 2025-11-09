@@ -37,7 +37,7 @@ error() {
 
 # Detect operating system
 detect_os() {
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    if [[ ""$OSTYPE"" == "linux-gnu"* ]]; then
         if command -v apt-get &> /dev/null; then
             OS="ubuntu"
         elif command -v yum &> /dev/null; then
@@ -46,23 +46,23 @@ detect_os() {
             error "Unsupported Linux distribution"
             exit 1
         fi
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
+    elif [[ ""$OSTYPE"" == "darwin"* ]]; then
         OS="macos"
     else
-        error "Unsupported operating system: $OSTYPE"
+        error "Unsupported operating system: "$OSTYPE""
         exit 1
     fi
     
-    log "Detected OS: $OS"
+    log "Detected OS: "$OS""
 }
 
 # Check if running as root (not recommended)
 check_root() {
-    if [[ $EUID -eq 0 ]]; then
+    if [[ "$EUID" -eq 0 ]]; then
         warning "Running as root is not recommended for this setup"
         read -p "Continue anyway? (y/N): " -n 1 -r
         echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
             exit 1
         fi
     fi
@@ -72,7 +72,7 @@ check_root() {
 install_system_deps() {
     log "Installing system dependencies..."
     
-    case $OS in
+    case "$OS" in
         ubuntu)
             sudo apt-get update
             sudo apt-get install -y \
@@ -126,7 +126,7 @@ install_system_deps() {
 install_powershell() {
     log "Installing PowerShell Core..."
     
-    case $OS in
+    case "$OS" in
         ubuntu)
             # Download and install PowerShell
             wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
@@ -157,8 +157,8 @@ install_powercli() {
     pwsh -Command "Install-Module -Name VMware.PowerCLI -Scope CurrentUser -Force"
     
     # Configure PowerCLI settings
-    pwsh -Command "Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Confirm:\$false -Scope User"
-    pwsh -Command "Set-PowerCLIConfiguration -ParticipateInCEIP \$false -Confirm:\$false -Scope User"
+    pwsh -Command "Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Confirm:\"$false" -Scope User"
+    pwsh -Command "Set-PowerCLIConfiguration -ParticipateInCEIP \"$false" -Confirm:\"$false" -Scope User"
     
     success "PowerCLI installed and configured"
 }
@@ -250,30 +250,30 @@ EOF
 Import-Module VMware.PowerCLI
 
 # Set PowerCLI configuration
-Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Confirm:$false -Scope Session
-Set-PowerCLIConfiguration -ParticipateInCEIP $false -Confirm:$false -Scope Session
+Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Confirm:"$false" -Scope Session
+Set-PowerCLIConfiguration -ParticipateInCEIP "$false" -Confirm:"$false" -Scope Session
 
 # Custom functions
 function Connect-LabvCenter {
     param(
-        [string]$Server = $env:VCENTER_SERVER,
-        [PSCredential]$Credential
+        [string]"$Server" = "$env":VCENTER_SERVER,
+        [PSCredential]"$Credential"
     )
     
-    if (-not $Server) {
+    if (-not "$Server") {
         Write-Error "vCenter server not specified. Set VCENTER_SERVER environment variable or use -Server parameter."
         return
     }
     
-    if (-not $Credential) {
-        $Credential = Get-Credential -Message "Enter vCenter credentials"
+    if (-not "$Credential") {
+        "$Credential" = Get-Credential -Message "Enter vCenter credentials"
     }
     
-    Connect-VIServer -Server $Server -Credential $Credential
+    Connect-VIServer -Server "$Server" -Credential "$Credential"
 }
 
 function Get-LabVMInfo {
-    Get-VM | Select-Object Name, PowerState, NumCpu, MemoryGB, @{N="IP Address";E={$_.Guest.IPAddress[0]}}, VMHost
+    Get-VM | Select-Object Name, PowerState, NumCpu, MemoryGB, @{N="IP Address";E={"$_".Guest.IPAddress[0]}}, VMHost
 }
 
 Write-Host "VMware vSphere Learning Environment Loaded" -ForegroundColor Green
@@ -314,14 +314,14 @@ install_additional_tools() {
     log "Installing additional tools..."
     
     # Install govc (vSphere CLI)
-    if [[ "$OS" == "macos" ]]; then
+    if [[ ""$OS"" == "macos" ]]; then
         brew install govmomi/tap/govc
     else
         # Download and install govc for Linux
         GOVC_VERSION=$(curl -s https://api.github.com/repos/vmware/govmomi/releases/latest | jq -r .tag_name)
         GOVC_URL="https://github.com/vmware/govmomi/releases/download/${GOVC_VERSION}/govc_Linux_x86_64.tar.gz"
         
-        wget -q "$GOVC_URL" -O /tmp/govc.tar.gz
+        wget -q ""$GOVC_URL"" -O /tmp/govc.tar.gz
         tar -xzf /tmp/govc.tar.gz -C /tmp
         sudo mv /tmp/govc /usr/local/bin/
         sudo chmod +x /usr/local/bin/govc

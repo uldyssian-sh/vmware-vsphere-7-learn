@@ -1,3 +1,4 @@
+$ErrorActionPreference = "Stop"
 <#
 .SYNOPSIS
 Automated VM deployment script for vSphere environments
