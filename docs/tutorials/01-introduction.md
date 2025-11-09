@@ -219,3 +219,4 @@ You're now ready to proceed with hands-on ESXi installation and configuration!
 ---
 
 **Next Tutorial**: [ESXi Installation & Configuration →](02-esxi-setup.md)# Updated 20251109_123839
+# Updated Sun Nov  9 12:49:15 CET 2025
