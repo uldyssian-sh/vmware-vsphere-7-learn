@@ -582,4 +582,3 @@ resource "vsphere_virtual_machine" "web_server" {
 ---
 
 *This guide provides a comprehensive foundation for VMware vSphere 7. Continue with the hands-on labs and practical exercises to reinforce your learning.*
-# Updated 20251109_123839

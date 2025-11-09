@@ -506,4 +506,3 @@ You now have a fully functional ESXi host ready for virtual machine deployment a
 
 ### Community
 - [VMware Community Forums](https://communities.vmware.com/)
-- [r/vmware Subreddit](https://reddit.com/r/vmware)# Updated 20251109_123839

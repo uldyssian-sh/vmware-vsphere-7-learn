@@ -5,4 +5,3 @@ rules:
   comments:
     min-spaces-from-content: 1
   document-start: disable
-  truthy: disable# Updated 20251109_123839
