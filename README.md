@@ -1,12 +1,7 @@
 # vmware-vsphere-7-learn
 
-[![AI-Powered](https://img.shields.io/badge/AI-Powered-blue?style=flat-square&logo=openai)](https://github.com/features/copilot)
-[![CodeQL](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/workflows/AI%20CodeQL%20Analysis/badge.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/actions)
-[![AI Assistant](https://img.shields.io/badge/AI-Assistant-green?style=flat-square)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/actions)
-[![Dependabot](https://img.shields.io/badge/Dependabot-AI-orange?style=flat-square)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/network/dependencies)
 
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/issues)
 [![GitHub stars](https://img.shields.io/github/stars/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/network)
