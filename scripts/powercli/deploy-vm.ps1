@@ -278,4 +278,4 @@ finally {
         Disconnect-VIServer -Server $vCenterServer -Confirm:$false
         Write-Status "Disconnected from vCenter Server" "Info"
     }
-}
+}# Updated Sun Nov  9 12:52:45 CET 2025
