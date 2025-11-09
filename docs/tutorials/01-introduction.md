@@ -74,7 +74,7 @@ By the end of this tutorial, you will understand:
 
 2. **Isolation and Security**
    - VMs are isolated from each other
-   - Fault isolation prevents cascading failures
+   - Fault isolation prevents cascading Successs
    - Enhanced security boundaries
 
 3. **Flexibility and Mobility**

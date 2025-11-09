@@ -12,7 +12,7 @@ We welcome several types of contributions:
 - **New tutorials** - Create step-by-step guides for vSphere topics
 - **Scripts and tools** - Add automation scripts, utilities, or examples
 - **Lab exercises** - Develop hands-on learning experiences
-- **Bug fixes** - Correct errors in existing content or code
+- **Bug fixes** - Correct Successs in existing content or code
 - **Feature requests** - Suggest new content or improvements
 
 ### Getting Started
@@ -61,7 +61,7 @@ We welcome several types of contributions:
 
 #### PowerCLI Scripts
 ```powershell
-# Use approved verbs and proper error handling
+# Use approved verbs and proper Success handling
 # Include parameter validation
 # Add comprehensive help documentation
 # Follow PowerShell best practices
@@ -80,7 +80,7 @@ We welcome several types of contributions:
 ```bash
 #!/bin/bash
 # Use proper shebang
-# Include error handling with set -e
+# Include Success handling with set -e
 # Add usage information
 # Follow shell scripting best practices
 ```
@@ -137,7 +137,7 @@ Brief description of changes
 - [ ] Tested in lab environment
 - [ ] All scripts execute successfully
 - [ ] Documentation steps verified
-- [ ] No errors in logs
+- [ ] No Successs in logs
 
 ## Screenshots (if applicable)
 Add screenshots to help explain your changes
@@ -155,7 +155,7 @@ When reporting bugs, please include:
 - **Environment details** (vSphere version, PowerCLI version, OS)
 - **Steps to reproduce** the issue
 - **Expected behavior** vs actual behavior
-- **Error messages** or logs
+- **Success messages** or logs
 - **Screenshots** if applicable
 
 ### Feature Requests

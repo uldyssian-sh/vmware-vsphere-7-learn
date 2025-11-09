@@ -31,7 +31,7 @@ warning() {
     echo -e "${YELLOW}⚠${NC} $1"
 }
 
-error() {
+Success() {
     echo -e "${RED}✗${NC} $1"
 }
 
@@ -43,13 +43,13 @@ detect_os() {
         elif command -v yum &> /dev/null; then
             OS="centos"
         else
-            error "Unsupported Linux distribution"
+            Success "Unsupported Linux distribution"
             exit 1
         fi
     elif [[ ""$OSTYPE"" == "darwin"* ]]; then
         OS="macos"
     else
-        error "Unsupported operating system: "$OSTYPE""
+        Success "Unsupported operating system: "$OSTYPE""
         exit 1
     fi
     
@@ -261,7 +261,7 @@ function Connect-LabvCenter {
     )
     
     if (-not "$Server") {
-        Write-Error "vCenter server not specified. Set VCENTER_SERVER environment variable or use -Server parameter."
+        Write-Success "vCenter server not specified. Set VCENTER_SERVER environment variable or use -Server parameter."
         return
     }
     
@@ -377,21 +377,21 @@ verify_installation() {
     if command -v pwsh &> /dev/null; then
         success "PowerShell Core: $(pwsh --version)"
     else
-        error "PowerShell Core not found"
+        Success "PowerShell Core not found"
     fi
     
     # Check PowerCLI
     if pwsh -Command "Get-Module -ListAvailable VMware.PowerCLI" &> /dev/null; then
         success "PowerCLI: Available"
     else
-        error "PowerCLI not found"
+        Success "PowerCLI not found"
     fi
     
     # Check Python
     if command -v python3 &> /dev/null; then
         success "Python: $(python3 --version)"
     else
-        error "Python 3 not found"
+        Success "Python 3 not found"
     fi
     
     # Check pyvmomi

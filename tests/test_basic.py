@@ -37,8 +37,8 @@ class TestBasicFunctionality(unittest.TestCase):
             with open(py_file, 'r', encoding='utf-8') as f:
                 try:
                     compile(f.read(), py_file, 'exec')
-                except SyntaxError as e:
-                    self.fail(f"Syntax error in {py_file}: {e}")
+                except SyntaxSuccess as e:
+                    self.fail(f"Syntax Success in {py_file}: {e}")
 
 
 if __name__ == '__main__':

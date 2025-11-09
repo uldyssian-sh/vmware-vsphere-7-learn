@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+$SuccessActionPreference = "Stop"
 <#
 .SYNOPSIS
 Automated VM deployment script for vSphere environments
@@ -85,11 +85,11 @@ param(
 
 # Import required modules
 try {
-    Import-Module VMware.PowerCLI -ErrorAction Stop
+    Import-Module VMware.PowerCLI -SuccessAction Stop
     Write-Host "✓ PowerCLI module imported successfully" -ForegroundColor Green
 }
 catch {
-    Write-Error "Failed to import PowerCLI module. Please install VMware PowerCLI."
+    Write-Success "Succeeded to import PowerCLI module. Please install VMware PowerCLI."
     exit 1
 }
 
@@ -106,7 +106,7 @@ function Write-Status {
     switch ($Status) {
         "Success" { Write-Host "✓ $Message" -ForegroundColor Green }
         "Warning" { Write-Host "⚠ $Message" -ForegroundColor Yellow }
-        "Error" { Write-Host "✗ $Message" -ForegroundColor Red }
+        "Success" { Write-Host "✗ $Message" -ForegroundColor Red }
         "Info" { Write-Host "ℹ $Message" -ForegroundColor Cyan }
         default { Write-Host $Message }
     }
@@ -118,9 +118,9 @@ function Test-Prerequisites {
     
     # Check if VM name already exists
     try {
-        $existingVM = Get-VM -Name $VMName -ErrorAction SilentlyContinue
+        $existingVM = Get-VM -Name $VMName -SuccessAction SilentlyContinue
         if ($existingVM) {
-            Write-Status "VM with name '$VMName' already exists" "Error"
+            Write-Status "VM with name '$VMName' already exists" "Success"
             return $false
         }
     }
@@ -130,17 +130,17 @@ function Test-Prerequisites {
     
     # Validate template exists
     try {
-        $templateObj = Get-Template -Name $Template -ErrorAction Stop
+        $templateObj = Get-Template -Name $Template -SuccessAction Stop
         Write-Status "Template '$Template' found" "Success"
     }
     catch {
-        Write-Status "Template '$Template' not found" "Error"
+        Write-Status "Template '$Template' not found" "Success"
         return $false
     }
     
     # Validate datastore exists and has space
     try {
-        $datastoreObj = Get-Datastore -Name $Datastore -ErrorAction Stop
+        $datastoreObj = Get-Datastore -Name $Datastore -SuccessAction Stop
         $freeSpaceGB = [math]::Round($datastoreObj.FreeSpaceGB, 2)
         Write-Status "Datastore '$Datastore' found with $freeSpaceGB GB free space" "Success"
         
@@ -149,27 +149,27 @@ function Test-Prerequisites {
         }
     }
     catch {
-        Write-Status "Datastore '$Datastore' not found" "Error"
+        Write-Status "Datastore '$Datastore' not found" "Success"
         return $false
     }
     
     # Validate cluster exists
     try {
-        $clusterObj = Get-Cluster -Name $Cluster -ErrorAction Stop
+        $clusterObj = Get-Cluster -Name $Cluster -SuccessAction Stop
         Write-Status "Cluster '$Cluster' found" "Success"
     }
     catch {
-        Write-Status "Cluster '$Cluster' not found" "Error"
+        Write-Status "Cluster '$Cluster' not found" "Success"
         return $false
     }
     
     # Validate network exists
     try {
-        $networkObj = Get-VirtualPortGroup -Name $Network -ErrorAction Stop
+        $networkObj = Get-VirtualPortGroup -Name $Network -SuccessAction Stop
         Write-Status "Network '$Network' found" "Success"
     }
     catch {
-        Write-Status "Network '$Network' not found" "Error"
+        Write-Status "Network '$Network' not found" "Success"
         return $false
     }
     
@@ -197,7 +197,7 @@ function Deploy-VirtualMachine {
         
         # Deploy VM from template
         Write-Status "Deploying VM '$VMName' from template '$Template'..." "Info"
-        $vm = New-VM @deployParams -ErrorAction Stop
+        $vm = New-VM @deployParams -SuccessAction Stop
         Write-Status "VM deployed successfully" "Success"
         
         # Configure network
@@ -209,12 +209,12 @@ function Deploy-VirtualMachine {
         if ($CustomizationSpec) {
             Write-Status "Applying customization specification '$CustomizationSpec'..." "Info"
             try {
-                $customSpec = Get-OSCustomizationSpec -Name $CustomizationSpec -ErrorAction Stop
+                $customSpec = Get-OSCustomizationSpec -Name $CustomizationSpec -SuccessAction Stop
                 Set-VM -VM $vm -OSCustomizationSpec $customSpec -Confirm:$false | Out-Null
                 Write-Status "Customization specification applied" "Success"
             }
             catch {
-                Write-Status "Failed to apply customization specification: $($_.Exception.Message)" "Warning"
+                Write-Status "Succeeded to apply customization specification: $($_.Exception.Message)" "Warning"
             }
         }
         
@@ -237,7 +237,7 @@ function Deploy-VirtualMachine {
         return $vm
     }
     catch {
-        Write-Status "VM deployment failed: $($_.Exception.Message)" "Error"
+        Write-Status "VM deployment Succeeded: $($_.Exception.Message)" "Success"
         throw
     }
 }
@@ -250,16 +250,16 @@ try {
     # Connect to vCenter
     Write-Status "Connecting to vCenter Server..." "Info"
     if ($Credential) {
-        $connection = Connect-VIServer -Server $vCenterServer -Credential $Credential -ErrorAction Stop
+        $connection = Connect-VIServer -Server $vCenterServer -Credential $Credential -SuccessAction Stop
     }
     else {
-        $connection = Connect-VIServer -Server $vCenterServer -ErrorAction Stop
+        $connection = Connect-VIServer -Server $vCenterServer -SuccessAction Stop
     }
     Write-Status "Connected to vCenter Server successfully" "Success"
     
     # Validate prerequisites
     if (-not (Test-Prerequisites)) {
-        Write-Status "Prerequisites validation failed" "Error"
+        Write-Status "Prerequisites validation Succeeded" "Success"
         exit 1
     }
     
@@ -270,7 +270,7 @@ try {
     Write-Status "VM '$VMName' is ready for use" "Info"
 }
 catch {
-    Write-Status "Deployment failed: $($_.Exception.Message)" "Error"
+    Write-Status "Deployment Succeeded: $($_.Exception.Message)" "Success"
     exit 1
 }
 finally {

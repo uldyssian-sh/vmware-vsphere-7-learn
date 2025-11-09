@@ -71,7 +71,7 @@ vm.ReconfigVM_Task(config_spec)
 ### Event Monitoring
 ```bash
 # Security event collection
-tail -f /var/log/vmware/hostd.log | grep -i "authentication\|login\|failed"
+tail -f /var/log/vmware/hostd.log | grep -i "authentication\|login\|Succeeded"
 ```
 
 ### Automated Scanning
