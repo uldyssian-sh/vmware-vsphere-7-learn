@@ -331,7 +331,6 @@ EOF
       run: |
         echo "🎉 Release ${{ github.ref }} completed successfully!"
         echo "✅ GitHub release created"
-        echo "✅ Documentation updated"
         echo "✅ GitHub Pages deployed"
         echo ""
         echo "🔗 Release URL: https://github.com/uldyssian-sh/vmware-vsphere-7-learn/releases/latest"
