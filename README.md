@@ -1,24 +1,5 @@
 # VMware vSphere 7 Learning Hub
 
-[![License](https://img.shields.io/github/license/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](#)
-[![Languages](https://img.shields.io/github/languages/count/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
-[![Size](https://img.shields.io/github/repo-size/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
-[![Security Scan](https://img.shields.io/badge/security-scanned-green?style=flat-square)](#)
-[![License](https://img.shields.io/github/license/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](#)
-[![Languages](https://img.shields.io/github/languages/count/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
-[![Size](https://img.shields.io/github/repo-size/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
-[![Security Scan](https://img.shields.io/badge/security-scanned-green?style=flat-square)](#)
-
-[![GitHub issues](https://img.shields.io/github/issues/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/issues)
-[![GitHub stars](https://img.shields.io/github/stars/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/network)
-[![CI](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/workflows/CI/badge.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/actions)
-[![Security Scan](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/workflows/Security%20Scan/badge.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/actions)
-[![Quality Gate](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/workflows/Quality%20Gate/badge.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/actions)
-[![Security](https://img.shields.io/badge/Security-Enterprise-blue.svg)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/blob/main/SECURITY.md)
-
 ## 🎯 Overview
 
 Professional VMware vSphere 7 learning solution with enterprise-grade automation and security features. Comprehensive learning resources and practical examples for VMware vSphere 7.0 virtualization platform with hands-on tutorials, automation scripts, and enterprise-grade examples for mastering vSphere 7 administration and development.
@@ -63,18 +44,6 @@ Professional VMware vSphere 7 learning solution with enterprise-grade automation
 
 ```bash
 # Clone repository
-
-[![License](https://img.shields.io/github/license/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](#)
-[![Languages](https://img.shields.io/github/languages/count/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
-[![Size](https://img.shields.io/github/repo-size/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
-[![Security Scan](https://img.shields.io/badge/security-scanned-green?style=flat-square)](#)
-
-[![License](https://img.shields.io/github/license/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](#)
-[![Languages](https://img.shields.io/github/languages/count/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
-[![Size](https://img.shields.io/github/repo-size/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
-[![Security Scan](https://img.shields.io/badge/security-scanned-green?style=flat-square)](#)
 git clone https://github.com/uldyssian-sh/vmware-vsphere-7-learn.git
 cd vmware-vsphere-7-learn
 
