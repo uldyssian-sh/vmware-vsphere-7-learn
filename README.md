@@ -6,6 +6,12 @@
 [![Size](https://img.shields.io/github/repo-size/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
 [![Security Scan](https://img.shields.io/badge/security-scanned-green?style=flat-square)](#)
 
+[![License](https://img.shields.io/github/license/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](LICENSE)
+[![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](#)
+[![Languages](https://img.shields.io/github/languages/count/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
+[![Size](https://img.shields.io/github/repo-size/uldyssian-sh/vmware-vsphere-7-learn?style=flat-square)](#)
+[![Security Scan](https://img.shields.io/badge/security-scanned-green?style=flat-square)](#)
+
 [![GitHub issues](https://img.shields.io/github/issues/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/issues)
 [![GitHub stars](https://img.shields.io/github/stars/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/uldyssian-sh/vmware-vsphere-7-learn)](https://github.com/uldyssian-sh/vmware-vsphere-7-learn/network)
